@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+block {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	background: #999;
+	borderRadius: 10px;
+}
