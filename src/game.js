@@ -11,9 +11,9 @@ export const setupGame = (store) => {
 
 const renderState = store => {
 	const state = store.getState();
-	animateMovement(prevX, prevY, state.game.x*10, state.game.y*10, 50);
-	prevX = state.game.x*10;
-	prevY = state.game.y*10;
+	animateMovement(prevX, prevY, state.game.x*50, state.game.y*50, 300);
+	prevX = state.game.x*50;
+	prevY = state.game.y*50;
 }
 
 function animateMovement(prevX, prevY, nextX, nextY, animLength, startTime, currTime) {
@@ -35,5 +35,16 @@ function animateMovement(prevX, prevY, nextX, nextY, animLength, startTime, curr
 }
 
 function renderInterpolatedMovement(prevX, prevY, nextX, nextY, t) {
-	ctx.fillRect((1 - t) * prevX + t * nextX, (1 - t) * prevY + t * nextY, 50, 50);
+	const cosTerm = -.5 * Math.cos(t * 2 * Math.PI) + .5;
+	let xStretch = Math.abs(nextX - prevX) * .5 * cosTerm;
+	let yStretch = Math.abs(nextY - prevY) * .5 * cosTerm;
+	if (prevX === nextX) {
+		xStretch = -.2 * yStretch;
+	}
+	else if (prevY === nextY) {
+		yStretch = -.2 * xStretch;
+	}
+	const x = (1 - t) * prevX + t * nextX;
+	const y = (1 - t) * prevY + t * nextY;
+	ctx.fillRect(x - xStretch / 2, y - yStretch / 2, 50 + xStretch, 50 + yStretch);
 }

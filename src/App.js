@@ -14,6 +14,7 @@ class App extends Component {
 	}
 
 	keyHandler = (e) => {
+		e.preventDefault();
 		const dir = e.keyCode - 37;
 		switch (dir) {
 			case 0:
