@@ -44,9 +44,11 @@ function animateMovement() {
 	
 	snake.update();
 
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	// block.render(ctx);
-	snake.render(ctx);
-	window.requestAnimationFrame(animateMovement);
+	if (!snake.atTarget) {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// block.render(ctx);
+		snake.render(ctx);
+		window.requestAnimationFrame(animateMovement);
+	}
 	// renderGrid();
 }

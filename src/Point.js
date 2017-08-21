@@ -10,19 +10,32 @@ export default function(x0, y0) {
 
 	let atTarget = true;
 
+	let tolerance = .05;
+
+	const checkAtTarget = (tolerance) => {
+		return (Math.abs(targetX - x) < tolerance && Math.abs(targetY - y) < tolerance);
+	}
+
 	return {
 		moveTo: (newX, newY) => {
 			targetX = newX;
 			targetY = newY;
-			atTarget = false;
+			atTarget = checkAtTarget(tolerance);
 		},
 		update: () => {
+			if (atTarget) {
+				return;
+			}
+			console.log("Updating");
+
 			const k = 1;
 			const fx = (targetX - x) * k;
 			const fy = (targetY - y) * k;
-			const tolerance = .05;
 			const damping = .3;
+			let atX = true;
+			let atY = true;
 			if (Math.abs(targetX - x) > tolerance) {
+				atX = false;
 				// const fx = k * (1 - (1 / targetX - x))
 				dx += fx;
 				dx *= damping;
@@ -30,6 +43,7 @@ export default function(x0, y0) {
 
 			}
 			if (Math.abs(targetY - y) > tolerance) {
+				atY = false;
 				// const fy = k * (1 - (1 / targetY - y))
 				dy += fy;
 				dy *= damping;
@@ -37,7 +51,7 @@ export default function(x0, y0) {
 
 			}
 
-			if (Math.abs(x - targetX) < tolerance && Math.abs(y - targetY) < tolerance) {
+			if (atX && atY) {
 				atTarget = true;
 			}
 		},
