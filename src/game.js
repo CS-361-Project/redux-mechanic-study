@@ -1,20 +1,17 @@
+import Block from './Block';
+import Snake from './snake/Snake';
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-let currX = 0;
-let currY = 0;
-
-let nextX = 0;
-let nextY = 0;
-
 let animating = false;
-
-let dx = 0;
-let dy = 0;
+// let block = new Block();
+let snake = new Snake(0, 0, 5);
 
 export const setupGame = (store) => {
 	store.subscribe(renderState.bind(this, store));
 	renderState(store);
+	animateMovement();
 }
 
 function renderGrid() {
@@ -35,41 +32,21 @@ function renderGrid() {
 
 const renderState = store => {
 	const state = store.getState();
-	nextX = state.game.x*50;
-	nextY = state.game.y*50;
-	if (!animating) {
-		animateMovement();
-	}
+	// block.moveTo(state.game.x*50, state.game.y*50);
+	snake.moveTo(state.game.x*50, state.game.y*50);
 }
 
 function animateMovement() {
-	const margin = .05;
-	if (Math.abs(nextX - currX) < margin && Math.abs(nextY - currY) < margin) {
-		animating = false;
-		return;
-	}
-	console.log("Still animating");
-	animating = true;
+	// animating = !block.atTarget;
+	
+	// block.update();
+	// console.log(block.getPos());
+	
+	snake.update();
+
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	renderInterpolatedMovement(nextX, nextY);
+	// block.render(ctx);
+	snake.render(ctx);
 	window.requestAnimationFrame(animateMovement);
-	renderGrid();
-}
-
-function renderInterpolatedMovement(nextX, nextY) {
-	const k = .4;
-	const fx = (nextX - currX) * k;
-	const fy = (nextY - currY) * k;
-	dx += fx;
-	dy += fy;
-	dx *= .5;
-	dy *= .5;
-	currX += dx;
-	currY += dy;
-	const x = currX;
-	const y = currY;
-
-	let xStretch = 0;
-	let yStretch = 0;
-	ctx.fillRect(x - xStretch / 2, y - yStretch / 2, 50 + xStretch, 50 + yStretch);
+	// renderGrid();
 }
